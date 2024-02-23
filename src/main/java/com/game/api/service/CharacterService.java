@@ -24,7 +24,7 @@ public class CharacterService {
         if(optionalCharacter.isPresent()) {
             return optionalCharacter.get();
         } else {
-            throw new EntityNotFoundException("User not found with id: "+ id);
+            throw new EntityNotFoundException("Character not found with id: "+ id);
         }
     }
 

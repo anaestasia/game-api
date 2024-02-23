@@ -1,7 +1,7 @@
 package com.game.api.controller;
 
-import com.game.api.entity.Character;
-import com.game.api.service.CharacterService;
+import com.game.api.entity.Slot;
+import com.game.api.service.SlotService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -13,81 +13,81 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/characters")
-@Tag(name = "Character", description = "Character Controller")
-public class CharacterController {
+@RequestMapping("/api/slots")
+@Tag(name = "Slot", description = "Slot Controller")
+public class SlotController {
 
     @Autowired
-    private CharacterService characterService;
+    private SlotService slotService;
 
     @Operation(
-            summary = "Get all characters",
-            description = "Get a list of all characters",
+            summary = "Get all slots",
+            description = "Get a list of all slots",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Success"),
                     @ApiResponse(responseCode = "404", description = "Not found"),
             }
     )
     @GetMapping
-    public ResponseEntity<List<Character>> getAllCharacters() {
-        List<Character> characters = characterService.getAllCharacters();
-        return new ResponseEntity<>(characters, HttpStatus.OK);
+    public ResponseEntity<List<Slot>> getAllSlots() {
+        List<Slot> slots = slotService.getAllSlots();
+        return new ResponseEntity<>(slots, HttpStatus.OK);
     }
 
-    // TODO : GetCharacterByName
+    // TODO : GetItemByName
 
     @Operation(
-            summary = "Get one character by ID",
-            description = "Get a character based on its ID",
+            summary = "Get one slot by ID",
+            description = "Get a slot based on its ID",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Success"),
                     @ApiResponse(responseCode = "404", description = "Not found"),
                     @ApiResponse(responseCode = "403", description = "Invalid request")
             })
     @GetMapping("/{id}")
-    public ResponseEntity<Character> getCharacterById(@PathVariable Long id) {
-        Character character = characterService.getCharacterById(id);
-        return new ResponseEntity<>(character, HttpStatus.OK);
+    public ResponseEntity<Slot> getSlotById(@PathVariable Long id) {
+        Slot slot = slotService.getSlotById(id);
+        return new ResponseEntity<>(slot, HttpStatus.OK);
     }
 
     @Operation(
-            summary = "Create a character",
-            description = "Create a new character",
+            summary = "Create a slot",
+            description = "Create a new slot",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Success"),
                     @ApiResponse(responseCode = "403", description = "Invalid request")
             })
     @PostMapping
-    public ResponseEntity<Character> createCharacter(@RequestBody Character character) {
-        Character createdCharacter = characterService.createCharacter(character);
-        return new ResponseEntity<>(createdCharacter, HttpStatus.OK);
+    public ResponseEntity<Slot> createSlot(@RequestBody Slot slot) {
+        Slot createdSlot = slotService.createSlot(slot);
+        return new ResponseEntity<>(createdSlot, HttpStatus.OK);
     }
 
     @Operation(
-            summary = "Update a character by ID",
-            description = "Modify a character based on its ID",
+            summary = "Update a slot by ID",
+            description = "Modify a slot based on its ID",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Success"),
                     @ApiResponse(responseCode = "404", description = "Not found"),
                     @ApiResponse(responseCode = "403", description = "Invalid request")
             })
     @PutMapping("/{id}")
-    public ResponseEntity<Character> updateCharacter(@RequestBody Character character) {
-        Character updatedCharacter = characterService.updateCharacter(character);
-        return new ResponseEntity<>(updatedCharacter, HttpStatus.OK);
+    public ResponseEntity<Slot> updateSlot(@RequestBody Slot slot) {
+        Slot updatedSlot = slotService.updateSlot(slot);
+        return new ResponseEntity<>(updatedSlot, HttpStatus.OK);
     }
 
     @Operation(
-            summary = "Delete a character by ID",
-            description = "Delete a character based on its ID",
+            summary = "Delete a slot by ID",
+            description = "Delete a slot based on its ID",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Success"),
                     @ApiResponse(responseCode = "404", description = "Not found"),
                     @ApiResponse(responseCode = "403", description = "Invalid request")
             })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCharacter(@PathVariable Long id) {
-        characterService.deleteCharacter(id);
+    public ResponseEntity<Void> deleteSlot(@PathVariable Long id) {
+        slotService.deleteSlot(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
