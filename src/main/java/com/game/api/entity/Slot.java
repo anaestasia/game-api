@@ -2,6 +2,8 @@ package com.game.api.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -20,6 +22,11 @@ public @Data class Slot {
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
     private EnumSlotType type;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "item_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Item item;
 
     @ManyToMany(mappedBy = "slots")
     private Set<Character> characters = new HashSet<>();
