@@ -1,15 +1,21 @@
 package com.game.api.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
 import java.util.Set;
 
-
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name="characters")
-public @Data class Character {
+public class Character {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,19 +24,23 @@ public @Data class Character {
     @Column(name = "name", nullable = false, length = 50)
     private String name;
 
-    // TODO : Add "race" field
+    // TODO : Add "race"
 
+    @Builder.Default
     @Column(name = "pv")
-    private int pv;
+    private int pv = 10;
 
+    @Builder.Default
     @Column(name = "atq")
-    private int atq;
+    private int atq = 2;
 
+    @Builder.Default
     @Column(name = "def")
-    private int def;
+    private int def = 0;
 
+    @Builder.Default
     @Column(name = "speed")
-    private int speed;
+    private int speed = 1;
 
     @ManyToMany
     @JoinTable(name = "characters_slots",

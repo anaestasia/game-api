@@ -1,5 +1,6 @@
 package com.game.api.service;
 
+import com.game.api.dto.request.CreateCharacterDTO;
 import com.game.api.entity.Character;
 import com.game.api.repository.CharacterRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -28,8 +29,11 @@ public class CharacterService {
         }
     }
 
-    public Character createCharacter(Character character) {
-        return characterRepository.save(character);
+    public Character createCharacter(CreateCharacterDTO requestDTO) {
+        Character createdCharacter = Character.builder()
+                .name(requestDTO.getName())
+                .build();
+        return characterRepository.save(createdCharacter);
     }
 
     public Character updateCharacter(Character character) {

@@ -1,10 +1,12 @@
 package com.game.api.controller;
 
+import com.game.api.dto.request.CreateCharacterDTO;
 import com.game.api.entity.Character;
 import com.game.api.service.CharacterService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +36,9 @@ public class CharacterController {
         return new ResponseEntity<>(characters, HttpStatus.OK);
     }
 
-    // TODO : GetCharacterByName
+    // TODO : SearchCharacterByName -> champ de saisie
+
+    // TODO : UpdateCharacterName -> DTO
 
     @Operation(
             summary = "Get one character by ID",
@@ -55,12 +59,12 @@ public class CharacterController {
             description = "Create a new character",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Success"),
-                    @ApiResponse(responseCode = "403", description = "Invalid request")
+                    @ApiResponse(responseCode = "400", description = "Bad request")
             })
     @PostMapping
-    public ResponseEntity<Character> createCharacter(@RequestBody Character character) {
-        Character createdCharacter = characterService.createCharacter(character);
-        return new ResponseEntity<>(createdCharacter, HttpStatus.OK);
+    public ResponseEntity<Character> createCharacter(@Valid @RequestBody CreateCharacterDTO requestDTO) {
+        Character createdCharacter = characterService.createCharacter(requestDTO);
+        return ResponseEntity.ok(createdCharacter);
     }
 
     @Operation(
@@ -72,8 +76,8 @@ public class CharacterController {
                     @ApiResponse(responseCode = "403", description = "Invalid request")
             })
     @PutMapping("/{id}")
-    public ResponseEntity<Character> updateCharacter(@RequestBody Character character) {
-        Character updatedCharacter = characterService.updateCharacter(character);
+    public ResponseEntity<Character> updateCharacter(@Valid @RequestBody Character requestDTO) {
+        Character updatedCharacter = characterService.updateCharacter(requestDTO);
         return new ResponseEntity<>(updatedCharacter, HttpStatus.OK);
     }
 
