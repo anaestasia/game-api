@@ -1,6 +1,8 @@
 package com.game.api.controller;
 
 import com.game.api.dto.request.CreateCharacterDTO;
+import com.game.api.dto.request.UpdateCharacterDTO;
+import com.game.api.dto.response.CharacterResponseDTO;
 import com.game.api.entity.Character;
 import com.game.api.service.CharacterService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -38,8 +40,6 @@ public class CharacterController {
 
     // TODO : SearchCharacterByName -> champ de saisie
 
-    // TODO : UpdateCharacterName -> DTO
-
     @Operation(
             summary = "Get one character by ID",
             description = "Get a character based on its ID",
@@ -76,10 +76,12 @@ public class CharacterController {
                     @ApiResponse(responseCode = "403", description = "Invalid request")
             })
     @PutMapping("/{id}")
-    public ResponseEntity<Character> updateCharacter(@Valid @RequestBody Character requestDTO) {
-        Character updatedCharacter = characterService.updateCharacter(requestDTO);
-        return new ResponseEntity<>(updatedCharacter, HttpStatus.OK);
+    public ResponseEntity<CharacterResponseDTO> updateCharacter(@PathVariable Long id, @Valid @RequestBody UpdateCharacterDTO requestDTO) {
+        CharacterResponseDTO updatedCharacter = characterService.updateCharacter(id, requestDTO);
+        return ResponseEntity.ok(updatedCharacter);
     }
+
+    // TODO : UpdateCharacterName -> DTO (destination user)
 
     @Operation(
             summary = "Delete a character by ID",
