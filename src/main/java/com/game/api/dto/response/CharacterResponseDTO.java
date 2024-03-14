@@ -1,10 +1,7 @@
 package com.game.api.dto.response;
 
 import com.game.api.entity.Slot;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Set;
 

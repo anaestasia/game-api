@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
-public class UpdateCharacterDTO {
+public class UpdateCharacterRequestDTO {
 
     @NotBlank(message = "The name can't be empty")
     @Size(max = 50, message = "The name must have 50 characters max")

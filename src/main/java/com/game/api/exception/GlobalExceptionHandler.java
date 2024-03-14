@@ -14,4 +14,10 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body("Invalid input data: " + ex.getBindingResult().getAllErrors());
     }
 
+    // Erreur custom
+    @ExceptionHandler(NameAlreadyTakenException.class)
+    public ResponseEntity<String> handleNameAlreadyTaken(NameAlreadyTakenException ex) {
+        return ResponseEntity.badRequest().body("Invalid name: " + ex.getMessage());
+    }
+
 }

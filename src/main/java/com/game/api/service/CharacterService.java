@@ -1,44 +1,59 @@
 package com.game.api.service;
 
-import com.game.api.dto.request.CreateCharacterDTO;
-import com.game.api.dto.request.UpdateCharacterDTO;
+import com.game.api.dto.request.CreateCharacterRequestDTO;
+import com.game.api.dto.request.UpdateCharacterRequestDTO;
 import com.game.api.dto.response.CharacterResponseDTO;
 import com.game.api.entity.Character;
+import com.game.api.exception.NameAlreadyTakenException;
+import com.game.api.mapper.CharacterMapper;
 import com.game.api.repository.CharacterRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class CharacterService {
 
-    @Autowired
-    private CharacterRepository characterRepository;
+    private final CharacterRepository characterRepository;
+    private final CharacterMapper characterMapper;
 
-    public List<Character> getAllCharacters() {
-        return characterRepository.findAll();
+    public List<CharacterResponseDTO> getAllCharacters() {
+        List<Character> characters = characterRepository.findAll();
+        return characters.stream()
+                .map(characterMapper::characterToCharacterResponseDTO)
+                .collect(Collectors.toList());
     }
 
-    public Character getCharacterById(Long id) {
+    public CharacterResponseDTO getCharacterById(Long id) {
         Optional<Character> optionalCharacter = characterRepository.findById(id);
         if(optionalCharacter.isPresent()) {
-            return optionalCharacter.get();
+            return characterMapper.characterToCharacterResponseDTO(optionalCharacter.get());
         } else {
             throw new EntityNotFoundException("Character not found with id: "+ id);
         }
     }
 
-    public Character createCharacter(CreateCharacterDTO requestDTO) {
-        Character createdCharacter = Character.builder()
+    public CharacterResponseDTO createCharacter(CreateCharacterRequestDTO requestDTO) {
+
+        Optional<Character> existingCharacter = characterRepository.findByName(requestDTO.getName());
+        if (existingCharacter.isPresent()) {
+            throw new NameAlreadyTakenException("Le nom est déjà pris. Veuillez en choisir un autre.");
+        }
+
+        // Create object
+        Character newCharacter = Character.builder()
                 .name(requestDTO.getName())
                 .build();
-        return characterRepository.save(createdCharacter);
+
+        return characterMapper.characterToCharacterResponseDTO(characterRepository.save(newCharacter));
     }
 
-    public CharacterResponseDTO updateCharacter(Long id, UpdateCharacterDTO requestDTO) {
+    public CharacterResponseDTO updateCharacter(Long id, UpdateCharacterRequestDTO requestDTO) {
 
         // Get the character if exists
         Character updatedCharacter = characterRepository.findById(id)
@@ -56,15 +71,7 @@ public class CharacterService {
         characterRepository.save(updatedCharacter);
 
         // Return ResponseDTO
-        return CharacterResponseDTO.builder()
-                .id(updatedCharacter.getId())
-                .name(updatedCharacter.getName())
-                .pv(updatedCharacter.getPv())
-                .atq(updatedCharacter.getAtq())
-                .def(updatedCharacter.getDef())
-                .speed(updatedCharacter.getSpeed())
-                .slots(updatedCharacter.getSlots())
-                .build();
+        return characterMapper.characterToCharacterResponseDTO(updatedCharacter);
     }
 
     public void deleteCharacter(Long id) {

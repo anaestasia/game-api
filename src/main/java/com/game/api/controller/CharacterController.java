@@ -1,9 +1,8 @@
 package com.game.api.controller;
 
-import com.game.api.dto.request.CreateCharacterDTO;
-import com.game.api.dto.request.UpdateCharacterDTO;
+import com.game.api.dto.request.CreateCharacterRequestDTO;
+import com.game.api.dto.request.UpdateCharacterRequestDTO;
 import com.game.api.dto.response.CharacterResponseDTO;
-import com.game.api.entity.Character;
 import com.game.api.service.CharacterService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -33,12 +32,12 @@ public class CharacterController {
             }
     )
     @GetMapping
-    public ResponseEntity<List<Character>> getAllCharacters() {
-        List<Character> characters = characterService.getAllCharacters();
-        return new ResponseEntity<>(characters, HttpStatus.OK);
+    public ResponseEntity<List<CharacterResponseDTO>> getAllCharacters() {
+        List<CharacterResponseDTO> characters = characterService.getAllCharacters();
+        return ResponseEntity.ok(characters);
     }
 
-    // TODO : SearchCharacterByName -> champ de saisie
+    // TODO : SearchCharacterWhereNameBeginBy('narv') -> champ de saisie / return 0,1 ou liste de character
 
     @Operation(
             summary = "Get one character by ID",
@@ -49,8 +48,8 @@ public class CharacterController {
                     @ApiResponse(responseCode = "403", description = "Invalid request")
             })
     @GetMapping("/{id}")
-    public ResponseEntity<Character> getCharacterById(@PathVariable Long id) {
-        Character character = characterService.getCharacterById(id);
+    public ResponseEntity<CharacterResponseDTO> getCharacterById(@PathVariable Long id) {
+        CharacterResponseDTO character = characterService.getCharacterById(id);
         return new ResponseEntity<>(character, HttpStatus.OK);
     }
 
@@ -62,8 +61,8 @@ public class CharacterController {
                     @ApiResponse(responseCode = "400", description = "Bad request")
             })
     @PostMapping
-    public ResponseEntity<Character> createCharacter(@Valid @RequestBody CreateCharacterDTO requestDTO) {
-        Character createdCharacter = characterService.createCharacter(requestDTO);
+    public ResponseEntity<CharacterResponseDTO> createCharacter(@Valid @RequestBody CreateCharacterRequestDTO requestDTO) {
+        CharacterResponseDTO createdCharacter = characterService.createCharacter(requestDTO);
         return ResponseEntity.ok(createdCharacter);
     }
 
@@ -76,7 +75,7 @@ public class CharacterController {
                     @ApiResponse(responseCode = "403", description = "Invalid request")
             })
     @PutMapping("/{id}")
-    public ResponseEntity<CharacterResponseDTO> updateCharacter(@PathVariable Long id, @Valid @RequestBody UpdateCharacterDTO requestDTO) {
+    public ResponseEntity<CharacterResponseDTO> updateCharacter(@PathVariable Long id, @Valid @RequestBody UpdateCharacterRequestDTO requestDTO) {
         CharacterResponseDTO updatedCharacter = characterService.updateCharacter(id, requestDTO);
         return ResponseEntity.ok(updatedCharacter);
     }
