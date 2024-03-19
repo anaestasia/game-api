@@ -5,6 +5,7 @@ import com.game.api.service.SlotService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,12 +14,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/slots")
 @Tag(name = "Slot", description = "Slot Controller")
 public class SlotController {
 
-    @Autowired
-    private SlotService slotService;
+    private final SlotService slotService;
 
     @Operation(
             summary = "Get all slots",

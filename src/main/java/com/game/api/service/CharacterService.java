@@ -9,6 +9,7 @@ import com.game.api.mapper.CharacterMapper;
 import com.game.api.repository.CharacterRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,7 +21,9 @@ import java.util.stream.Collectors;
 public class CharacterService {
 
     private final CharacterRepository characterRepository;
-    private final CharacterMapper characterMapper;
+
+    @Autowired
+    private CharacterMapper characterMapper;
 
     public List<CharacterResponseDTO> getAllCharacters() {
         List<Character> characters = characterRepository.findAll();
