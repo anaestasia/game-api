@@ -25,6 +25,7 @@ public class CharacterService {
     @Autowired
     private CharacterMapper characterMapper;
 
+    /* -- GET ALL -- */
     public List<CharacterResponseDTO> getAllCharacters() {
         List<Character> characters = characterRepository.findAll();
         return characters.stream()
@@ -32,6 +33,15 @@ public class CharacterService {
                 .collect(Collectors.toList());
     }
 
+    /* -- GET ALL WHERE NAME STARTING WITH -- */
+    public List<CharacterResponseDTO> getCharactersWhereNameStartingWith(String prefix) {
+        List<Character> characters = characterRepository.findAllByNameStartingWith(prefix);
+        return characters.stream()
+                .map(characterMapper::characterToCharacterResponseDTO)
+                .collect(Collectors.toList());
+    }
+
+    /* -- GET BY ID -- */
     public CharacterResponseDTO getCharacterById(Long id) {
         Optional<Character> optionalCharacter = characterRepository.findById(id);
         if(optionalCharacter.isPresent()) {
@@ -41,6 +51,7 @@ public class CharacterService {
         }
     }
 
+    /* -- CREATE -- */
     public CharacterResponseDTO createCharacter(CreateCharacterRequestDTO requestDTO) {
 
         Optional<Character> existingCharacter = characterRepository.findByName(requestDTO.getName());
@@ -56,6 +67,7 @@ public class CharacterService {
         return characterMapper.characterToCharacterResponseDTO(characterRepository.save(newCharacter));
     }
 
+    /* -- UPDATE -- */
     public CharacterResponseDTO updateCharacter(Long id, UpdateCharacterRequestDTO requestDTO) {
 
         // Get the character if exists
@@ -77,6 +89,7 @@ public class CharacterService {
         return characterMapper.characterToCharacterResponseDTO(updatedCharacter);
     }
 
+    /* -- DELETE -- */
     public void deleteCharacter(Long id) {
         if(characterRepository.existsById(id)) {
             characterRepository.deleteById(id);

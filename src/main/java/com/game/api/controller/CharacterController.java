@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +23,7 @@ public class CharacterController {
 
     private final CharacterService characterService;
 
+    /* -- GET ALL -- */
     @Operation(
             summary = "Get all characters",
             description = "Get a list of all characters",
@@ -38,8 +38,7 @@ public class CharacterController {
         return ResponseEntity.ok(characters);
     }
 
-    // TODO : SearchCharacterWhereNameBeginBy('narv') -> champ de saisie / return 0,1 ou liste de character
-
+    /* -- GET ONE -- */
     @Operation(
             summary = "Get one character by ID",
             description = "Get a character based on its ID",
@@ -54,6 +53,23 @@ public class CharacterController {
         return new ResponseEntity<>(character, HttpStatus.OK);
     }
 
+    /* -- GET ALL WHERE NAME STARTING WITH -- */
+    // TODO : SearchCharacterWhereNameBeginBy('narv') -> champ de saisie / return 0,1 ou liste de character
+    @Operation(
+            summary = "Get all characters where name begin by 'prefix'",
+            description = "Get a list of all characters where name begin by 'prefix'",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Success"),
+                    @ApiResponse(responseCode = "404", description = "Not found"),
+            }
+    )
+    @GetMapping
+    public ResponseEntity<List<CharacterResponseDTO>> getCharactersWhereNameStartingWith(String prefix) {
+        List<CharacterResponseDTO> characters = characterService.getCharactersWhereNameStartingWith(prefix);
+        return ResponseEntity.ok(characters);
+    }
+
+    /* -- CREATE -- */
     @Operation(
             summary = "Create a character",
             description = "Create a new character",
@@ -67,6 +83,7 @@ public class CharacterController {
         return ResponseEntity.ok(createdCharacter);
     }
 
+    /* -- UPDATE (DESTINATION ADMIN) -- */
     @Operation(
             summary = "Update a character by ID",
             description = "Modify a character based on its ID",
@@ -81,8 +98,7 @@ public class CharacterController {
         return ResponseEntity.ok(updatedCharacter);
     }
 
-    // TODO : UpdateCharacterName -> DTO (destination user)
-
+    /* -- DELETE -- */
     @Operation(
             summary = "Delete a character by ID",
             description = "Delete a character based on its ID",
