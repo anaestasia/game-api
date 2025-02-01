@@ -31,3 +31,19 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Maven ###
+/.mvn
+/mvnw
+/mvnw.cmd
+/target/
+
+### Dossier de Build ###
+build/
+
+### Fichiers générés par les tests ###
+/test-logs/
+
+### Fichiers de base de données locaux ###
+# *.db
+# *.sql

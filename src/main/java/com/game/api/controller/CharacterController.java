@@ -53,21 +53,21 @@ public class CharacterController {
         return new ResponseEntity<>(character, HttpStatus.OK);
     }
 
-    /* -- GET ALL WHERE NAME STARTING WITH -- */
-    // TODO : SearchCharacterWhereNameBeginBy('narv') -> champ de saisie / return 0,1 ou liste de character
-    @Operation(
-            summary = "Get all characters where name begin by 'prefix'",
-            description = "Get a list of all characters where name begin by 'prefix'",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "Success"),
-                    @ApiResponse(responseCode = "404", description = "Not found"),
-            }
-    )
-    @GetMapping
-    public ResponseEntity<List<CharacterResponseDTO>> getCharactersWhereNameStartingWith(String prefix) {
-        List<CharacterResponseDTO> characters = characterService.getCharactersWhereNameStartingWith(prefix);
-        return ResponseEntity.ok(characters);
-    }
+//    /* -- GET ALL WHERE NAME STARTING WITH -- */
+//    // TODO : SearchCharacterWhereNameBeginBy('narv') -> champ de saisie / return 0,1 ou liste de character
+//    @Operation(
+//            summary = "Get all characters where name begin by 'prefix'",
+//            description = "Get a list of all characters where name begin by 'prefix'",
+//            responses = {
+//                    @ApiResponse(responseCode = "200", description = "Success"),
+//                    @ApiResponse(responseCode = "404", description = "Not found"),
+//            }
+//    )
+//    @GetMapping
+//    public ResponseEntity<List<CharacterResponseDTO>> getCharactersWhereNameStartingWith(String prefix) {
+//        List<CharacterResponseDTO> characters = characterService.getCharactersWhereNameStartingWith(prefix);
+//        return ResponseEntity.ok(characters);
+//    }
 
     /* -- CREATE -- */
     @Operation(
