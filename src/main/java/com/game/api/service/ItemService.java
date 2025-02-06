@@ -28,7 +28,7 @@ public class ItemService {
     public List<ItemResponseDTO> getAllItems() {
         List<Item> items = itemRepository.findAll();
         if(items.isEmpty()) {
-            throw new NoRessourcesFoundException("No items found")
+            throw new NoRessourcesFoundException("No items found");
         } else {
             return items.stream()
                     .map(itemMapper::itemToItemResponseDTO)
