@@ -20,4 +20,9 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body("Invalid name: " + ex.getMessage());
     }
 
+    @ExceptionHandler(NoCharactersFoundException.class)
+    public ResponseEntity<String> handleNoCharactersFoundException(NoCharactersFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No data found: " + ex.getMessage());
+    }
+
 }

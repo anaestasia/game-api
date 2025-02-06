@@ -28,9 +28,13 @@ public class CharacterService {
     /* -- GET ALL -- */
     public List<CharacterResponseDTO> getAllCharacters() {
         List<Character> characters = characterRepository.findAll();
-        return characters.stream()
-                .map(characterMapper::characterToCharacterResponseDTO)
-                .collect(Collectors.toList());
+        if(characters.isEmpty()){
+            throw new EntityNotFoundException("Character not found");
+        } else {
+            return characters.stream()
+                    .map(characterMapper::characterToCharacterResponseDTO)
+                    .collect(Collectors.toList());
+        }
     }
 
     /* -- GET ALL WHERE NAME STARTING WITH -- */
@@ -43,12 +47,9 @@ public class CharacterService {
 
     /* -- GET BY ID -- */
     public CharacterResponseDTO getCharacterById(Long id) {
-        Optional<Character> optionalCharacter = characterRepository.findById(id);
-        if(optionalCharacter.isPresent()) {
-            return characterMapper.characterToCharacterResponseDTO(optionalCharacter.get());
-        } else {
-            throw new EntityNotFoundException("Character not found with id: "+ id);
-        }
+        Character character = characterRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Character not found with id : " + id));
+        return characterMapper.characterToCharacterResponseDTO(character);
     }
 
     /* -- CREATE -- */
@@ -56,10 +57,9 @@ public class CharacterService {
 
         Optional<Character> existingCharacter = characterRepository.findByName(requestDTO.getName());
         if (existingCharacter.isPresent()) {
-            throw new NameAlreadyTakenException("Le nom est déjà pris. Veuillez en choisir un autre.");
+            throw new NameAlreadyTakenException("This name already exist. Please, choose another name.");
         }
 
-        // Create object
         Character newCharacter = Character.builder()
                 .name(requestDTO.getName())
                 .build();
@@ -91,10 +91,8 @@ public class CharacterService {
 
     /* -- DELETE -- */
     public void deleteCharacter(Long id) {
-        if(characterRepository.existsById(id)) {
-            characterRepository.deleteById(id);
-        } else {
-            throw new EntityNotFoundException("Character not found with id : "+ id);
-        }
+        Character character = characterRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Character not found with id: " + id));
+        characterRepository.delete(character);
     }
 }

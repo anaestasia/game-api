@@ -50,14 +50,14 @@ public class CharacterController {
     @GetMapping("/{id}")
     public ResponseEntity<CharacterResponseDTO> getCharacterById(@PathVariable Long id) {
         CharacterResponseDTO character = characterService.getCharacterById(id);
-        return new ResponseEntity<>(character, HttpStatus.OK);
+        return ResponseEntity.ok(character);
     }
 
     /* -- GET ALL WHERE NAME STARTING WITH -- */
     // TODO : SearchCharacterWhereNameBeginBy('narv') -> champ de saisie / return 0,1 ou liste de character
     @Operation(
             summary = "Get all characters where name begin by 'prefix'",
-            description = "Get a list of all characters where name begin by 'prefix'",
+            description = "Get a list of all characters where name begin by ...",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Success"),
                     @ApiResponse(responseCode = "404", description = "Not found"),
@@ -110,6 +110,6 @@ public class CharacterController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCharacter(@PathVariable Long id) {
         characterService.deleteCharacter(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 }
