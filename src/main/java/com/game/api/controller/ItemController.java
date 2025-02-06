@@ -1,12 +1,14 @@
 package com.game.api.controller;
 
+import com.game.api.dto.request.ItemRequestDTO;
+import com.game.api.dto.response.ItemResponseDTO;
 import com.game.api.entity.Item;
 import com.game.api.service.ItemService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,9 +32,9 @@ public class ItemController {
             }
     )
     @GetMapping
-    public ResponseEntity<List<Item>> getAllItems() {
-        List<Item> items = itemService.getAllItems();
-        return new ResponseEntity<>(items, HttpStatus.OK);
+    public ResponseEntity<List<ItemResponseDTO>> getAllItems() {
+        List<ItemResponseDTO> items = itemService.getAllItems();
+        return ResponseEntity.ok(items);
     }
 
     // TODO : GetItemByName
@@ -46,9 +48,9 @@ public class ItemController {
                     @ApiResponse(responseCode = "403", description = "Invalid request")
             })
     @GetMapping("/{id}")
-    public ResponseEntity<Item> getItemById(@PathVariable Long id) {
-        Item item = itemService.getItemById(id);
-        return new ResponseEntity<>(item, HttpStatus.OK);
+    public ResponseEntity<ItemResponseDTO> getItemById(@PathVariable Long id) {
+        ItemResponseDTO item = itemService.getItemById(id);
+        return ResponseEntity.ok(item);
     }
 
     @Operation(
@@ -59,9 +61,9 @@ public class ItemController {
                     @ApiResponse(responseCode = "403", description = "Invalid request")
             })
     @PostMapping
-    public ResponseEntity<Item> createItem(@RequestBody Item item) {
-        Item createdItem = itemService.createItem(item);
-        return new ResponseEntity<>(createdItem, HttpStatus.OK);
+    public ResponseEntity<ItemResponseDTO> createItem(@Valid @RequestBody ItemRequestDTO requestDTO) {
+        ItemResponseDTO createdItem = itemService.createItem(requestDTO);
+        return ResponseEntity.ok(createdItem);
     }
 
     @Operation(
@@ -73,9 +75,9 @@ public class ItemController {
                     @ApiResponse(responseCode = "403", description = "Invalid request")
             })
     @PutMapping("/{id}")
-    public ResponseEntity<Item> updateItem(@RequestBody Item item) {
-        Item updatedItem = itemService.updateItem(item);
-        return new ResponseEntity<>(updatedItem, HttpStatus.OK);
+    public ResponseEntity<ItemResponseDTO> updateItem(@PathVariable Long id, @Valid @RequestBody ItemRequestDTO requestDTO) {
+        ItemResponseDTO updatedItem = itemService.updateItem(id, requestDTO);
+        return ResponseEntity.ok(updatedItem);
     }
 
     @Operation(
@@ -89,6 +91,6 @@ public class ItemController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteItem(@PathVariable Long id) {
         itemService.deleteItem(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 }

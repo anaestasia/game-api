@@ -29,7 +29,7 @@ public class CharacterService {
     public List<CharacterResponseDTO> getAllCharacters() {
         List<Character> characters = characterRepository.findAll();
         if(characters.isEmpty()){
-            throw new EntityNotFoundException("Character not found");
+            throw new EntityNotFoundException("No characters not found");
         } else {
             return characters.stream()
                     .map(characterMapper::characterToCharacterResponseDTO)
@@ -55,16 +55,14 @@ public class CharacterService {
     /* -- CREATE -- */
     public CharacterResponseDTO createCharacter(CreateCharacterRequestDTO requestDTO) {
 
-        Optional<Character> existingCharacter = characterRepository.findByName(requestDTO.getName());
-        if (existingCharacter.isPresent()) {
+        // Check if character's name already exists
+        if (characterRepository.findByName(requestDTO.getName()).isPresent()) {
             throw new NameAlreadyTakenException("This name already exist. Please, choose another name.");
         }
 
-        Character newCharacter = Character.builder()
-                .name(requestDTO.getName())
-                .build();
-
-        return characterMapper.characterToCharacterResponseDTO(characterRepository.save(newCharacter));
+        return characterMapper.characterToCharacterResponseDTO(
+                characterRepository.save(Character.builder().name(requestDTO.getName()).build())
+        );
     }
 
     /* -- UPDATE -- */
@@ -74,7 +72,7 @@ public class CharacterService {
         Character updatedCharacter = characterRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Character not found with id : " + id));
 
-        // Update fields
+        // Update fields // TODO : If something change only
         updatedCharacter.setName(requestDTO.getName());
         updatedCharacter.setPv(requestDTO.getPv());
         updatedCharacter.setAtq(requestDTO.getAtq());
